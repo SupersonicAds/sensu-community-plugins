@@ -56,6 +56,12 @@ class SQSMsgs < Sensu::Plugin::Check::CLI
          description: 'The name of the SQS you want to check the number of messages for',
          required: true
 
+  option :include_non_visible,
+         short: '-i',
+         long: '--include_non_visible',
+         description: 'Including non visible messages in count',
+         default: false
+
   option :warn_over,
          short: '-w WARN_OVER',
          long: '--warnnum WARN_OVER',
@@ -95,7 +101,11 @@ class SQSMsgs < Sensu::Plugin::Check::CLI
   def run
     AWS.config aws_config
     sqs = AWS::SQS.new
-    messages = sqs.queues.named(config[:queue]).approximate_number_of_messages
+    if config[:include_non_visible] == true
+      messages = sqs.queues.named(config[:queue]).approximate_number_of_messages + sqs.queues.named(config[:queue]).approximate_number_of_messages
+    else  
+      messages = sqs.queues.named(config[:queue]).approximate_number_of_messages
+    end  
 
     if (config[:crit_under] >= 0 && messages < config[:crit_under]) || (config[:crit_over] >= 0 && messages > config[:crit_over])
       critical "#{messages} message(s) in #{config[:queue]} queue"
