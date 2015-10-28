@@ -59,7 +59,7 @@ class SQSMsgs < Sensu::Plugin::Check::CLI
   option :include_non_visible,
          short: '-i',
          long: '--include_non_visible',
-         description: 'Including non visible messages in count',
+         description: 'Including non visible messages in count'
 
 
   option :warn_over,
