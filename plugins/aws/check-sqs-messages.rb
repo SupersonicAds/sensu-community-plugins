@@ -102,7 +102,7 @@ class SQSMsgs < Sensu::Plugin::Check::CLI
     AWS.config aws_config
     sqs = AWS::SQS.new
     if config[:include_non_visible]
-      messages = sqs.queues.named(config[:queue]).approximate_number_of_messages + sqs.queues.named(config[:queue]).approximate_number_of_messages
+      messages = sqs.queues.named(config[:queue]).approximate_number_of_messages + sqs.queues.named(config[:queue]).approximate_number_of_messages_not_visible
     else  
       messages = sqs.queues.named(config[:queue]).approximate_number_of_messages
     end  
