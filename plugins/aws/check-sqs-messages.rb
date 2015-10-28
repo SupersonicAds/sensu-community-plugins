@@ -60,7 +60,7 @@ class SQSMsgs < Sensu::Plugin::Check::CLI
          short: '-i',
          long: '--include_non_visible',
          description: 'Including non visible messages in count',
-         default: false
+
 
   option :warn_over,
          short: '-w WARN_OVER',
@@ -101,7 +101,7 @@ class SQSMsgs < Sensu::Plugin::Check::CLI
   def run
     AWS.config aws_config
     sqs = AWS::SQS.new
-    if config[:include_non_visible] == true
+    if config[:include_non_visible]
       messages = sqs.queues.named(config[:queue]).approximate_number_of_messages + sqs.queues.named(config[:queue]).approximate_number_of_messages
     else  
       messages = sqs.queues.named(config[:queue]).approximate_number_of_messages
